@@ -8,7 +8,15 @@
 
 Каждую находку скаут сверяет с первоисточником: сайтом компании, changelog, репозиторием. Поисковые сводки регулярно пересказывают продукты, которых нет, поэтому в конце отчёта есть блок «Не прошло проверку».
 
-Я пользуюсь таким скаутом сама. Это его версия для вас: без моего контекста, с местом под ваш.
+## Для кого
+
+Для фаундеров и маркетинговых команд, которым некогда следить за всеми релизами в ИИ и рекламе. Заточен под B2C с платным привлечением: мобильные приложения, финтех, e-com. Если у вас другой продукт, опишите его в блоке «КОНТЕКСТ», и скаут перестроит отбор.
+
+## Зачем я его сделала
+
+Для себя. Новинок в ИИ и рекламе выходит столько, что на чтение уходила бы половина недели. А поисковые сводки уверенно пересказывают продукты, которых нет: однажды выдача дружно описывала видеопродукт Meta с ценой и функциями, а его не существовало. Мне нужен был фильтр, который приносит немного, но проверенного, и сразу пишет, что с этим делать.
+
+Я пользуюсь им сама. Здесь его версия для вас: без моего контекста, с местом под ваш.
 
 [Аня Ветринская](https://vetrinskaya.com), growth co-founder
 
@@ -55,6 +63,6 @@
 
 ## English
 
-A weekly AI scout for founders and marketing teams: 3–5 verified picks on AI marketing tools, ad platforms (Meta, Google, TikTok, Apple, AppsFlyer), and agents and models. Every pick is checked against a primary source; what failed the check is listed separately. Download `SKILL.md`, fill in the CONTEXT block, and ask Claude to schedule it every Monday. The prompt is in Russian; add "write the report in English" to the context block to get English output.
+A weekly AI scout for founders and marketing teams who have no time to track every release in AI and advertising. Tuned for B2C products with paid acquisition (mobile apps, fintech, e-commerce). I built it for myself: there are too many launches, and search summaries confidently describe products that do not exist. It brings 3–5 verified picks on AI marketing tools, ad platforms (Meta, Google, TikTok, Apple, AppsFlyer), and agents and models. Every pick is checked against a primary source; what failed the check is listed separately. Download `SKILL.md`, fill in the CONTEXT block, and ask Claude to schedule it every Monday. The prompt is in Russian; add "write the report in English" to the context block to get English output.
 
 License: MIT
