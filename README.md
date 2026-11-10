@@ -22,9 +22,9 @@
 
 ## Что нужно
 
-[Claude](https://claude.ai/download) с задачами по расписанию: десктоп-приложение (Cowork или Claude Code) или Claude Code в терминале. Подписка Pro или выше.
+Любой ИИ-ассистент, который умеет искать в интернете и запускать задачи по расписанию. Скаут: это текст инструкции без кода, он не привязан к одному сервису. Я проверяла его в [Claude](https://claude.ai/download), с него и начинается инструкция ниже. Другие варианты описаны в разделе «Не пользуетесь Claude?».
 
-## Как поставить (5 минут)
+## Как поставить в Claude (5 минут)
 
 1. Скачайте [`SKILL.md`](SKILL.md).
 2. Откройте его и заполните блок «КОНТЕКСТ»: продукт, рынки, каналы, команда, что сейчас важнее всего. Чем точнее, тем меньше шума в отчёте.
@@ -32,7 +32,18 @@
    > Создай из этого файла задачу по расписанию: каждый понедельник в 9:00.
 4. Попросите Claude запустить задачу один раз сразу, чтобы посмотреть первый отчёт.
 
-Отчёт появится в истории запусков задачи.
+Отчёт появится в истории запусков задачи. Нужна подписка Pro или выше и десктоп-приложение (Cowork или Claude Code) либо Claude Code в терминале.
+
+## Не пользуетесь Claude?
+
+Скопируйте текст `SKILL.md` (после заполнения «КОНТЕКСТА») и поставьте его задачей по расписанию там, где вам удобно:
+
+- **ChatGPT:** Tasks. Попросите: «Выполняй эту инструкцию каждый понедельник в 9:00». Отчёт придёт уведомлением.
+- **Gemini:** Scheduled actions, по тому же принципу.
+- **Perplexity:** Tasks. Поиск у Perplexity сильный, для скаута это плюс.
+- **n8n или Make:** цепочка «расписание → модель с веб-поиском → Telegram или почта».
+
+Шаг 5 про Telegram в этих сервисах выполнить не получится, им нужен доступ к командной строке. Отчёт придёт их собственным уведомлением. Обычно для задач по расписанию нужна платная подписка сервиса.
 
 ## Отчёт в Telegram (по желанию)
 
@@ -63,6 +74,6 @@
 
 ## English
 
-A weekly AI scout for founders and marketing teams who have no time to track every release in AI and advertising. Tuned for B2C products with paid acquisition (mobile apps, fintech, e-commerce). I built it for myself: there are too many launches, and search summaries confidently describe products that do not exist. It brings 3–5 verified picks on AI marketing tools, ad platforms (Meta, Google, TikTok, Apple, AppsFlyer), and agents and models. Every pick is checked against a primary source; what failed the check is listed separately. Download `SKILL.md`, fill in the CONTEXT block, and ask Claude to schedule it every Monday. The prompt is in Russian; add "write the report in English" to the context block to get English output.
+A weekly AI scout for founders and marketing teams who have no time to track every release in AI and advertising. Tuned for B2C products with paid acquisition (mobile apps, fintech, e-commerce). I built it for myself: there are too many launches, and search summaries confidently describe products that do not exist. It brings 3–5 verified picks on AI marketing tools, ad platforms (Meta, Google, TikTok, Apple, AppsFlyer), and agents and models. Every pick is checked against a primary source; what failed the check is listed separately. Download `SKILL.md`, fill in the CONTEXT block, and schedule it every Monday in Claude, ChatGPT (Tasks), Gemini (Scheduled actions), Perplexity (Tasks) or n8n/Make. Tested in Claude; Telegram delivery needs shell access (Claude Code or the Claude desktop app). The prompt is in Russian; add "write the report in English" to the context block to get English output.
 
 License: MIT
