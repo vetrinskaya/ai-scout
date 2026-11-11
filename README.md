@@ -1,5 +1,7 @@
 # ИИ-скаут по маркетингу и рекламе
 
+[English version](README.en.md)
+
 Агент, который раз в неделю находит новинки в ИИ и рекламе и приносит 3–5 находок, которые стоят времени фаундера и маркетинговой команды:
 
 - **ИИ-инструменты:** креативы, аналитика, тестирование;
@@ -74,6 +76,6 @@
 
 ## English
 
-A weekly AI scout for founders and marketing teams who have no time to track every release in AI and advertising. Tuned for B2C products with paid acquisition (mobile apps, fintech, e-commerce). I built it for myself: there are too many launches, and search summaries confidently describe products that do not exist. It brings 3–5 verified picks on AI marketing tools, ad platforms (Meta, Google, TikTok, Apple, AppsFlyer), and agents and models. Every pick is checked against a primary source; what failed the check is listed separately. Download `SKILL.md`, fill in the CONTEXT block, and schedule it every Monday in Claude, ChatGPT (Tasks), Gemini (Scheduled actions), Perplexity (Tasks) or n8n/Make. Tested in Claude; Telegram delivery needs shell access (Claude Code or the Claude desktop app). The prompt is in Russian; add "write the report in English" to the context block to get English output.
+A weekly AI scout for founders and marketing teams: 3–5 verified picks on AI marketing tools, ad platforms, and agents and models. Full English instructions are in [README.en.md](README.en.md), the English prompt is in [SKILL.en.md](SKILL.en.md).
 
 License: MIT
