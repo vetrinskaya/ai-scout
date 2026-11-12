@@ -22,51 +22,72 @@ I use it myself. This is a version for you: without my context, with a place for
 
 [Anna Vetrinskaya](https://vetrinskaya.com), growth co-founder
 
-## What you need
+## How to start (3 minutes)
 
-Any AI assistant that can search the web and run scheduled tasks. The scout is plain text with no code, so it is not tied to one service. I tested it in [Claude](https://claude.ai/download), and the instructions below start there. Other options are in the "Not using Claude?" section.
+Any AI assistant that can search the web and run scheduled tasks will work: ChatGPT, Gemini, Perplexity, Claude. The scout is plain text with no code, so it is not tied to one service.
 
-## How to set it up in Claude (5 minutes)
+1. Open [`SKILL.en.md`](SKILL.en.md) and copy all the text.
+2. Fill in the CONTEXT block: product, markets, channels, team, what matters most right now. The more precise it is, the less noise in the report.
+3. Paste the text into a chat with your assistant and add:
+   > Run this instruction every Monday at 9:00.
+4. Ask it to run once right away to see the first report.
 
-1. Download [`SKILL.en.md`](SKILL.en.md).
-2. Open it and fill in the CONTEXT block: product, markets, channels, team, what matters most right now. The more precise it is, the less noise in the report.
-3. Open Claude, attach the file and write:
+Where to set it up:
+
+- **ChatGPT:** Tasks. The report comes as a notification.
+- **Gemini:** Scheduled actions.
+- **Perplexity:** Tasks. Perplexity search is strong, which is good for a scout.
+- **Claude:** scheduled tasks in the desktop app, see below.
+
+Scheduled tasks usually need a paid plan. I use the scout in Claude myself, so it is tested best there.
+
+## If you use Claude
+
+In [Claude](https://claude.ai/download) you do not need to copy the text. You can give it the whole file:
+
+1. Download [`SKILL.en.md`](SKILL.en.md) and fill in the CONTEXT block.
+2. Open Claude, attach the file and write:
    > Create a scheduled task from this file: every Monday at 9:00.
-4. Ask Claude to run the task once right away to see the first report.
+3. Ask Claude to run the task once right away.
 
 The report appears in the task's run history. You need a Pro plan or higher and the desktop app (Cowork or Claude Code), or Claude Code in the terminal.
 
-## Not using Claude?
+## If you build your own automations
 
-Copy the text of `SKILL.en.md` (after you fill in CONTEXT) and set it up as a scheduled task where it is convenient for you:
-
-- **ChatGPT:** Tasks. Ask: "Run this instruction every Monday at 9:00." The report comes as a notification.
-- **Gemini:** Scheduled actions, the same way.
-- **Perplexity:** Tasks. Perplexity search is strong, which is good for a scout.
-- **n8n or Make:** a chain of "schedule → model with web search → Telegram or email".
-
-Step 5 about Telegram will not work in these services, because it needs command-line access. The report comes through their own notification. Scheduled tasks usually need a paid plan.
-
-## Report in Telegram (optional)
-
-1. Create a bot with [@BotFather](https://t.me/BotFather) and copy the token.
-2. Send any message to your bot. Then open `https://api.telegram.org/bot<TOKEN>/getUpdates` and find `"chat":{"id":...}`: this is your chat id.
-3. Add both variables to `~/.claude/settings.json`:
-   ```json
-   {
-     "env": {
-       "TELEGRAM_BOT_TOKEN": "your token",
-       "TELEGRAM_CHAT_ID": "your chat id"
-     }
-   }
-   ```
-   Keep the token only there: do not paste it into `SKILL.en.md` and do not publish it in a repository.
+In n8n or Make, set the scout up as a chain of "schedule → model with web search → Telegram or email". The text of `SKILL.en.md` goes into the model instruction. Remove step 5 from it: the chain handles delivery.
 
 ## How to adjust it
 
 - **Topics and sources** are edited in steps 1–2 of `SKILL.en.md`.
 - **Rhythm.** You can run the scout every day. Then replace "7 days" with "1–2 days" in step 1.
 - **Language.** For a report in another language, change the line "Write in English" in step 4. A Russian version of the scout is in [`SKILL.md`](SKILL.md).
+
+## Report in Telegram (optional)
+
+This section is for people whose assistant runs commands on their own computer: Claude Code in the app or in the terminal. You do not need it in ChatGPT, Gemini or Perplexity: they run on their own servers, and the report comes through their notification. Do not paste a bot token there: they cannot send the message, and the token will stay in the chat history.
+
+A bot token is a password. It is stored in the macOS Keychain, not in files. All commands below are typed in the Terminal app.
+
+1. Create a bot with [@BotFather](https://t.me/BotFather) and copy the token.
+2. Save the token in the Keychain. The command asks you to paste the token twice, and it does not show it on screen:
+   ```bash
+   security add-generic-password -a "$USER" -s ai-scout-tg-token -w
+   ```
+3. Send any message to your bot in Telegram. Then find your chat id:
+   ```bash
+   T=$(security find-generic-password -s ai-scout-tg-token -w) && curl -s "https://api.telegram.org/bot${T}/getUpdates" | grep -o '"chat":{"id":[0-9-]*' | head -1
+   ```
+   The answer is a line like `"chat":{"id":123456789`. The number at the end is your chat id.
+4. Save the chat id the same way, under a different name:
+   ```bash
+   security add-generic-password -a "$USER" -s ai-scout-tg-chat -w
+   ```
+
+Done. On the next run the scout takes the token from the Keychain and sends the report. On first access macOS may ask for permission: run the scout once by hand and click "Always Allow", or a scheduled run will stop at that window.
+
+Do not paste the token into `SKILL.en.md` or into a chat with the assistant, and do not publish it in a repository.
+
+**Windows and Linux.** There is no Keychain there. Set the environment variables `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` with your system tools, and the scout will use them. Do not put the token into project files.
 
 ## Want more
 

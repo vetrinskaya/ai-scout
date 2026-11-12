@@ -62,16 +62,22 @@ Write in English, briefly and without hype. Do not use words like "revolutionary
 === STEP 5. DELIVERY ===
 By default the report stays as the answer of this task: you can see it in the run history or in the service notification. If you have no access to a command line (for example, in ChatGPT, Gemini or Perplexity), skip the rest of this step.
 
-If you want the report in Telegram, set the environment variables TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID (the README explains how). Then, after the report:
-1. Check that both variables are set: [ -n "$TELEGRAM_BOT_TOKEN" ] && [ -n "$TELEGRAM_CHAT_ID" ] && echo ok. If not, leave the report as the task answer and say that Telegram is not configured. Do not look for the token in files and never print it.
-2. Convert the report to Telegram HTML: <b>, <i>, <a href="...">, no h1–h3 headings. Write it to a file with a heredoc, with quotes around the marker:
+Send the report to Telegram only if the user has set up a bot (the README explains how). The token is in the macOS Keychain under the name ai-scout-tg-token, the chat id under the name ai-scout-tg-chat. On Windows and Linux the environment variables TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are set instead.
+
+The token is a password. Read it only inside the send command, as shown below. Never print it (echo, printenv, set -x), never write it to a file and never look for it in files.
+
+1. Convert the report to Telegram HTML: <b>, <i>, <a href="...">, no h1–h3 headings. Write it to a file with a heredoc, with quotes around the marker:
    cat > msg.txt << 'ENDOFMSG'
    ...text...
    ENDOFMSG
-3. Send it with a POST request:
-   curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-     --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+2. Send it with one command. It reads the token and the chat id itself and does nothing if Telegram is not configured:
+   T=$(security find-generic-password -s ai-scout-tg-token -w 2>/dev/null || printf %s "$TELEGRAM_BOT_TOKEN"); \
+   C=$(security find-generic-password -s ai-scout-tg-chat -w 2>/dev/null || printf %s "$TELEGRAM_CHAT_ID"); \
+   if [ -z "$T" ] || [ -z "$C" ]; then echo "Telegram is not configured"; else \
+   curl -s -X POST "https://api.telegram.org/bot${T}/sendMessage" \
+     --data-urlencode "chat_id=${C}" \
      --data-urlencode "parse_mode=HTML" \
      --data-urlencode "disable_web_page_preview=true" \
-     --data-urlencode "text@msg.txt"
-4. The response must be {"ok":true}. Telegram accepts up to 4096 characters: split a long report into parts. If there is a markup error, fix the HTML and send again.
+     --data-urlencode "text@msg.txt"; fi
+3. If the command answered "Telegram is not configured", leave the report as the task answer and say so in one line.
+4. Otherwise the response must be {"ok":true}. Telegram accepts up to 4096 characters: split a long report into parts. If there is a markup error, fix the HTML and send again. After sending, delete msg.txt.

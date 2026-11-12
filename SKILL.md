@@ -62,16 +62,22 @@ description: Еженедельный ИИ-скаут для фаундера и
 === ШАГ 5. ДОСТАВКА ===
 По умолчанию отчёт остаётся ответом этой задачи: его видно в истории запусков или в уведомлении сервиса. Если у тебя нет доступа к командной строке (например, в ChatGPT, Gemini или Perplexity), остальную часть этого шага пропусти.
 
-Если хочешь получать отчёт в Telegram, задай переменные окружения TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID (как это сделать, написано в README). Тогда после отчёта:
-1. Проверь, что обе переменные заданы: [ -n "$TELEGRAM_BOT_TOKEN" ] && [ -n "$TELEGRAM_CHAT_ID" ] && echo ok. Если нет, оставь отчёт ответом задачи и напиши, что Telegram не настроен. Не ищи токен в файлах и никогда не выводи его.
-2. Переведи отчёт в Telegram HTML: <b>, <i>, <a href="...">, без заголовков h1–h3. Запиши в файл через heredoc с кавычками вокруг маркера:
+Отчёт в Telegram отправляй, только если пользователь настроил бота (как это сделать, написано в README). Токен лежит в связке ключей macOS под именем ai-scout-tg-token, chat id под именем ai-scout-tg-chat. На Windows и Linux вместо этого заданы переменные окружения TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID.
+
+Токен это пароль. Бери его только внутри команды отправки, как показано ниже. Никогда не выводи его (echo, printenv, set -x), не записывай в файлы и не ищи в файлах.
+
+1. Переведи отчёт в Telegram HTML: <b>, <i>, <a href="...">, без заголовков h1–h3. Запиши в файл через heredoc с кавычками вокруг маркера:
    cat > msg.txt << 'ENDOFMSG'
    ...текст...
    ENDOFMSG
-3. Отправь POST-запросом:
-   curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-     --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+2. Отправь одной командой. Она сама берёт токен и chat id и ничего не делает, если Telegram не настроен:
+   T=$(security find-generic-password -s ai-scout-tg-token -w 2>/dev/null || printf %s "$TELEGRAM_BOT_TOKEN"); \
+   C=$(security find-generic-password -s ai-scout-tg-chat -w 2>/dev/null || printf %s "$TELEGRAM_CHAT_ID"); \
+   if [ -z "$T" ] || [ -z "$C" ]; then echo "Telegram не настроен"; else \
+   curl -s -X POST "https://api.telegram.org/bot${T}/sendMessage" \
+     --data-urlencode "chat_id=${C}" \
      --data-urlencode "parse_mode=HTML" \
      --data-urlencode "disable_web_page_preview=true" \
-     --data-urlencode "text@msg.txt"
-4. Ответ должен быть {"ok":true}. Telegram принимает до 4096 символов: длинный отчёт разбей на части. При ошибке разметки исправь HTML и повтори.
+     --data-urlencode "text@msg.txt"; fi
+3. Если команда ответила «Telegram не настроен», оставь отчёт ответом задачи и скажи об этом одной строкой.
+4. Иначе ответ должен быть {"ok":true}. Telegram принимает до 4096 символов: длинный отчёт разбей на части. При ошибке разметки исправь HTML и повтори. После отправки удали msg.txt.
